@@ -6,7 +6,7 @@ A bitcoin docker image.
 
 ## Tags
 
-- `0.15.1`, `0.15`, `latest` ([0.15/Dockerfile](https://github.com/hbasria/dockerfiles/bitcoind/blob/master/Dockerfile))
+- `0.15.1`, `0.15`, `latest` ([0.15/Dockerfile](https://github.com/hbasria/dockerfiles/blob/master/bitcoind/Dockerfile))
 
 ## Quick start
 
