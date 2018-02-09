@@ -1,45 +1,17 @@
 FROM alpine
 
-MAINTAINER Hasan Basri <hbasria@gmail.com>
+MAINTAINER siriuslabs <info@siriuslabs.net>
 
 RUN apk add --update --no-cache \
-		ca-certificates \
-		curl \
-		wget \
-		tar \
-		xz
+	ca-certificates \
+	curl 
 
 ENV GOSU_VERSION 1.10
 
-RUN set -ex; \
-	\
-	apk add --no-cache --virtual .gosu-deps \
-		dpkg \
-		gnupg \
-		openssl \
-	; \
-	\
-	dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
-	wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch"; \
-	wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc"; \
-	\
-    # verify the signature
-	export GNUPGHOME="$(mktemp -d)"; \
-	gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \
-	gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
-	rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc; \
-	\
-	chmod +x /usr/local/bin/gosu; \
-    # verify that the binary works
-	gosu nobody true; \
-	\
-	apk del .gosu-deps
+RUN curl -Ls "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64" > /usr/local/bin/gosu \
+	&& chmod +x /usr/local/bin/gosu
 
+ENV ENVTPL_VERSION 0.2.3
 
-ENV CONFD_VERSION 0.11.0
-
-ENV CONFD_OPTS '--backend=env --onetime'
-
-RUN curl -SL "https://github.com/kelseyhightower/confd/releases/download/v$CONFD_VERSION/confd-$CONFD_VERSION-linux-amd64" > /usr/bin/confd \
-    && chmod +x /usr/bin/confd \
-    && mkdir -p /etc/confd/{conf.d,templates}
+RUN curl -Ls https://github.com/arschles/envtpl/releases/download/${ENVTPL_VERSION}/envtpl_linux_amd64 > /usr/local/bin/envtpl \
+    && chmod +x /usr/local/bin/envtpl
