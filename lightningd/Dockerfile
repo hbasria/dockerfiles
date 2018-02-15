@@ -37,7 +37,7 @@ RUN git clone https://github.com/ElementsProject/lightning.git /opt/lightningd \
 
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
-EXPOSE 8332 8333 18332 18333
+EXPOSE 9735
 
 VOLUME ["/home/lightning/.lightning"]
 
