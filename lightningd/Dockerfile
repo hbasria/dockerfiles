@@ -42,5 +42,3 @@ EXPOSE 9735
 VOLUME ["/home/lightning/.lightning"]
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
-
-CMD ["lightningd"]

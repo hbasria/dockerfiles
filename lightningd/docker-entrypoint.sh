@@ -5,6 +5,8 @@ set -e
 
 BITCOIN_DATA=${BITCOIN_DATA:-/home/lightning/.bitcoin}
 
+BITCOIN_RPC_HOST=${BITCOIN_RPC_HOST:-127.0.0.1}
+
 BITCOIN_RPC_USER=${BITCOIN_RPC_USER:-bitcoin}
 
 BITCOIN_RPC_PASSWORD=${BITCOIN_RPC_PASSWORD:-password}
@@ -23,6 +25,7 @@ LIGHTNING_DEBUG=${LIGHTNING_DEBUG:-info}
 
 PARAMS=$(echo \
     "--bitcoin-datadir=$BITCOIN_DATA" \
+    "--bitcoin-rpcconnect=$BITCOIN_RPC_HOST" \
     "--bitcoin-rpcuser=$BITCOIN_RPC_USER" \
     "--bitcoin-rpcpassword=$BITCOIN_RPC_PASSWORD" \
     "--network=$BITCOIN_NETWORK" \
@@ -36,6 +39,10 @@ PARAMS=$(echo \
 PARAMS="$PARAMS $@"
 
 # Print command and start lightning node.
-echo "Command: $1 $PARAMS"
+echo "Command: lightningd $PARAMS"
 
-exec gosu lightning "$@"
+if [ "$1" = "bash" ] || [ "$1" = "sh" ]; then
+    exec "$@"
+else
+    exec gosu lightning lightningd $PARAMS
+fi
