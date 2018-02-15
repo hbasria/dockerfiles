@@ -1,6 +1,6 @@
 FROM siriuslabs/alpine
 
-MAINTAINER Hasan Basri <hbasria@gmail.com>
+MAINTAINER siriuslabs <info@siriuslabs.net>
 
 RUN apk add --update --no-cache \
 		python3 \
