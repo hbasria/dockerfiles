@@ -27,13 +27,17 @@ if [ "$BITCOIN_PRINT_TO_CONSOLE" = "1" ]; then
     PARAMS="$PARAMS -printtoconsole"
 fi
 
-# Add user parameters to command.
+CMD=$1
+
+shift;
+
 PARAMS="$PARAMS $@"
 
 # Print command and start bitcoin node.
-echo "Command: $1 $PARAMS"
 
-if [ "$1" = "bitcoin-cli" ] || [ "$1" = "bitcoin-tx" ] || [ "$1" = "bitcoind" ]; then
+
+if [ "$CMD" = "bitcoin-cli" ] || [ "$CMD" = "bitcoin-tx" ] || [ "$CMD" = "bitcoind" ]; then
+
     mkdir -p "$BITCOIN_DATA"
 
     if [ ! -s "$BITCOIN_DATA/bitcoin.conf" ]; then
@@ -46,10 +50,11 @@ rpcallowip=${BITCOIN_RPC_ALLOW_IP:-::/0}
 EOF
         chown -R bitcoin:bitcoin "$BITCOIN_DATA"
     fi
-
-    exec gosu bitcoin "$@"
+    echo "Command: $CMD $PARAMS"
+    exec gosu bitcoin $CMD $PARAMS
 else
-    exec "$@"    
+    echo "Command: $CMD $@"
+    exec $CMD $@
 fi
 
 
